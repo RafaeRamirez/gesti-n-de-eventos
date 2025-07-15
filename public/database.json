@@ -1,0 +1,99 @@
+{
+  "roles": [
+    {
+      "id": "1",
+      "name": "worker"
+    },
+    {
+      "id": "2",
+      "name": "customer"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "admin",
+      "email": "admin@eventos.com",
+      "password": "admin123",
+      "rol": "1"
+    },
+    {
+      "id": "1",
+      "nombre": "admin",
+      "email": "rafa@eventos.com",
+      "password": "admin123",
+      "rol": "1"
+    },
+    {
+      "id": "2",
+      "nombre": "miguel",
+      "email": "rafaa@fffhf.com",
+      "password": "123456",
+      "rol": "2"
+    },
+    {
+      "id": "3",
+      "nombre": "rafael",
+      "email": "ramirez@gmail.com",
+      "password": "oppa",
+      "rol": "2"
+    },
+    {
+      "id": "4",
+      "nombre": "kenjiro",
+      "email": "kenjiro@gmail.com",
+      "password": "kenjiro",
+      "rol": "2"
+    },
+    {
+      "id": "c0e7",
+      "nombre": "rafael augusto ramirez bolaño",
+      "email": "rafar1129@gmail.com",
+      "password": "12345678",
+      "rol": "1"
+    }
+  ],
+  "eventos": [
+    {
+      "id": "62c2",
+      "titulo": "evento del puerto",
+      "descripcion": "es unos de los eventos mas importante",
+      "categoria": "logistica",
+      "capacidad": 60,
+      "organizador": "rafael"
+    },
+    {
+      "id": "8296",
+      "titulo": "evento del puerto",
+      "descripcion": "es unos de los eventos mas importante",
+      "categoria": "logistica",
+      "capacidad": 76,
+      "organizador": "rafael"
+    },
+    {
+      "id": "9ef1",
+      "titulo": "evento del puerto",
+      "descripcion": "es unos de los eventos mas importante",
+      "categoria": "logistica",
+      "capacidad": 67,
+      "organizador": "rafael"
+    }
+  ],
+  "inscripciones": [
+    {
+      "id": "6f3f",
+      "eventoId": null,
+      "usuarioId": 2
+    },
+    {
+      "id": "9d96",
+      "eventoId": null,
+      "usuarioId": 2
+    },
+    {
+      "id": "7a3b",
+      "eventoId": null,
+      "usuarioId": 2
+    }
+  ]
+}

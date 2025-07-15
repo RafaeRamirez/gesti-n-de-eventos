@@ -1,0 +1,232 @@
+/* === PANEL GENERAL === */
+section#admin-panel,
+section#estudiante-panel {
+  background-image: url(https://plus.unsplash.com/premium_photo-1661320891334-e46de87e8467?q=80&w=869&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.4s ease;
+}
+
+section h2 {
+  text-align: center;
+  font-size: 2.4rem;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+/* === BOTONES PANEL === */
+.admin-botones,
+.estudiante-botones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.admin-botones button,
+.estudiante-botones button {
+  padding: 12px 20px;
+  background-color: #6c63ff;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 180px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-botones button:hover,
+.estudiante-botones button:hover {
+  background-color: #544dd9;
+  transform: scale(1.03);
+}
+
+/* === VISTA DINÁMICA DE CADA PANEL === */
+#admin-vista,
+#estudiante-vista {
+  margin-top: 20px;
+  background-color: #f8faff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+/* === FORMULARIO DE CREAR/EDITAR CURSO === */
+#form-eventos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+#form-eventos input {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#form-eventos button {
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+#form-eventos button:hover {
+  background-color: #218838;
+}
+
+/* === TARJETAS DE CURSOS === */
+#admin-vista > div,
+#estudiante-vista > div {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+#admin-vista hr,
+#estudiante-vista hr {
+  margin-top: 16px;
+  border: none;
+  border-top: 1px dashed #bbb;
+}
+
+/* === BOTONES DE ACCIÓN === */
+.editar,
+.eliminar,
+.eliminar-insc,
+.btn-inscribir {
+  margin-top: 10px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Botón editar */
+.editar {
+  background-color: #ffc107;
+  color: #212529;
+}
+.editar:hover {
+  background-color: #e0a800;
+}
+
+/* Botón eliminar */
+.eliminar,
+.eliminar-insc {
+  background-color: #dc3545;
+  color: white;
+}
+.eliminar:hover,
+.eliminar-insc:hover {
+  background-color: #c82333;
+}
+
+/* Botón inscribir */
+.btn-inscribir {
+  background-color: #007bff;
+  color: white;
+}
+.btn-inscribir:hover {
+  background-color: #0056b3;
+}
+
+/* === LISTA DE INSCRITOS === */
+#admin-vista ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+#admin-vista li {
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#admin-vista em,
+#estudiante-vista em {
+  display: block;
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+  .admin-botones,
+  .estudiante-botones {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .admin-botones button,
+  .estudiante-botones button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  section h2 {
+    font-size: 2rem;
+  }
+
+  #form-curso input,
+  #form-curso button {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section#admin-panel,
+  section#estudiante-panel {
+    padding: 30px 16px;
+  }
+
+  #admin-vista,
+  #estudiante-vista {
+    padding: 16px;
+  }
+
+  section h2 {
+    font-size: 1.7rem;
+  }
+
+  #form-curso input {
+    padding: 10px;
+  }
+
+  .editar,
+  .eliminar,
+  .eliminar-insc,
+  .btn-inscribir {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+}
+
+/* === ANIMACIÓN OPCIONAL === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
