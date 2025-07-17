@@ -55,45 +55,29 @@
   ],
   "eventos": [
     {
-      "id": "62c2",
       "titulo": "evento del puerto",
       "descripcion": "es unos de los eventos mas importante",
       "categoria": "logistica",
       "capacidad": 60,
-      "organizador": "rafael"
-    },
-    {
-      "id": "8296",
-      "titulo": "evento del puerto",
-      "descripcion": "es unos de los eventos mas importante",
-      "categoria": "logistica",
-      "capacidad": 76,
-      "organizador": "rafael"
-    },
-    {
-      "id": "9ef1",
-      "titulo": "evento del puerto",
-      "descripcion": "es unos de los eventos mas importante",
-      "categoria": "logistica",
-      "capacidad": 67,
-      "organizador": "rafael"
+      "organizador": "rafael",
+      "id": "62c2"
     }
   ],
   "inscripciones": [
     {
-      "id": "6f3f",
-      "eventoId": null,
-      "usuarioId": 2
-    },
-    {
       "id": "9d96",
-      "eventoId": null,
+      "eventoId": "62c2",
       "usuarioId": 2
     },
     {
       "id": "7a3b",
-      "eventoId": null,
+      "eventoId": "62c2",
       "usuarioId": 2
+    },
+    {
+      "id": "c25e",
+      "eventoId": "62c2",
+      "usuarioId": "3"
     }
   ]
 }

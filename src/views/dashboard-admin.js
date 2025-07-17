@@ -1,18 +1,18 @@
 import { getUsuarioActual, logout } from "../js/auth.js";
 
-const API = "http://localhost:3000"; 
+const API = "http://localhost:3000";
 
 export function mostrarDashboardAdmin() {
   const app = document.getElementById("app");
-  const usurio  = getUsuarioActual();
+  const usuario = getUsuarioActual();
 
   app.innerHTML = `
     <section id="admin-panel" class="dashboard-fondo">
-      <h2> Dashboard Administrador</h2>
+      <h2>Dashboard Administrador</h2>
       <div class="admin-botones">
         <button id="btn-crear">📘 Crear eventos</button>
         <button id="btn-ver-eventos">📋 Ver eventos disponibles</button>
-        <button id="btn-ver-inscripciones"> Ver inscripto</button>
+        <button id="btn-ver-inscripciones">👥 Ver inscritos</button>
         <button id="btn-inicio">🏠 Volver al inicio</button>
         <button id="cerrar-sesion">❌ Cerrar sesión</button>
       </div>
@@ -21,7 +21,7 @@ export function mostrarDashboardAdmin() {
   `;
 
   document.getElementById("btn-crear").addEventListener("click", () => mostrarFormularioEventos());
-  document.getElementById("btn-ver-eventos").addEventListener("click", mostrarEvetos);
+  document.getElementById("btn-ver-eventos").addEventListener("click", mostrarEventos);
   document.getElementById("btn-ver-inscripciones").addEventListener("click", mostrarInscripciones);
   document.getElementById("btn-inicio").addEventListener("click", () => {
     window.location.hash = "#/";
@@ -34,6 +34,8 @@ export function mostrarDashboardAdmin() {
 
 function mostrarFormularioEventos(evento = null) {
   const vista = document.getElementById("admin-vista");
+  const usuario = getUsuarioActual();
+
   vista.innerHTML = `
     <h3>${evento ? 'Editar evento' : 'Crear nuevo evento'}</h3>
     <form id="form-eventos">
@@ -41,7 +43,7 @@ function mostrarFormularioEventos(evento = null) {
       <input type="text" id="descripcion" placeholder="Descripción" value="${evento ? evento.descripcion : ''}" required />
       <input type="text" id="categoria" placeholder="Categoría" value="${evento ? evento.categoria : ''}" required />
       <input type="number" id="capacidad" placeholder="Capacidad máxima" value="${evento ? evento.capacidad : ''}" required min="1" />
-      <input type="text" id="organizador" placeholder="organizador" value="${evento ? evento.organizador : ''}" required />
+      <input type="text" id="organizador" value="${evento ? evento.organizador : usuario.nombre}" readonly />
       <button type="submit">${evento ? 'Actualizar' : 'Crear'}</button>
     </form>
   `;
@@ -57,6 +59,19 @@ function mostrarFormularioEventos(evento = null) {
       capacidad: parseInt(form.capacidad.value),
       organizador: form.organizador.value.trim()
     };
+
+    // Validación adicional
+    if (
+      !datosEventos.titulo ||
+      !datosEventos.descripcion ||
+      !datosEventos.categoria ||
+      !datosEventos.organizador ||
+      isNaN(datosEventos.capacidad) ||
+      datosEventos.capacidad <= 0
+    ) {
+      alert("❌ Todos los campos deben estar completos y válidos.");
+      return;
+    }
 
     try {
       let res;
@@ -77,23 +92,23 @@ function mostrarFormularioEventos(evento = null) {
       if (!res.ok) throw new Error("Error al guardar el evento");
 
       alert(`✅ Evento ${evento ? 'actualizado' : 'creado'} exitosamente.`);
-      mostrarEvetos();
+      mostrarEventos();
     } catch (error) {
       console.error(error);
-      alert("❌ Error al guardar El evento.");
+      alert("❌ Error al guardar el evento.");
     }
   });
 }
 
-async function  mostrarEvetos() {
+async function mostrarEventos() {
   const vista = document.getElementById("admin-vista");
   vista.innerHTML = "<h3>Listado de Eventos</h3>";
 
   try {
     const eventos = await (await fetch(`${API}/eventos`)).json();
 
-    for (const evento of  eventos) {
-      const inscripciones = await (await fetch(`${API}/inscripciones?eventoId=${eventos.id}`)).json();
+    for (const evento of eventos) {
+      const inscripciones = await (await fetch(`${API}/inscripciones?eventoId=${evento.id}`)).json();
       const inscritos = inscripciones.length;
       const cuposDisponibles = evento.capacidad - inscritos;
 
@@ -103,8 +118,8 @@ async function  mostrarEvetos() {
         <strong>${evento.titulo}</strong> - ${evento.descripcion}<br>
         Categoría: ${evento.categoria} | Organizador: ${evento.organizador}<br>
         Capacidad: ${evento.capacidad} | Inscritos: ${inscritos} | Cupos disponibles: ${cuposDisponibles}<br>
-        <button class="editar" data-id="${eventos.id}">✏️ Editar</button>
-        <button class="eliminar" data-id="${eventos.id}">🗑️ Eliminar</button>
+        <button class="editar" data-id="${evento.id}">✏️ Editar</button>
+        <button class="eliminar" data-id="${evento.id}">🗑️ Eliminar</button>
         <hr>
       `;
       vista.appendChild(div);
@@ -121,13 +136,13 @@ async function  mostrarEvetos() {
     document.querySelectorAll(".eliminar").forEach(btn => {
       btn.addEventListener("click", async () => {
         const id = btn.dataset.id;
-        const confirmar = confirm("¿Seguro que deseas eliminar este evento ?");
+        const confirmar = confirm("¿Seguro que deseas eliminar este evento?");
         if (!confirmar) return;
 
         const res = await fetch(`${API}/eventos/${id}`, { method: "DELETE" });
         if (res.ok) {
-          alert("✅ evento eliminado");
-          mostrarEvetos();
+          alert("✅ Evento eliminado");
+          mostrarEventos();
         } else {
           alert("❌ No se pudo eliminar");
         }
@@ -136,31 +151,31 @@ async function  mostrarEvetos() {
 
   } catch (error) {
     console.error(error);
-    vista.innerHTML += "<p>Error cargando el evento.</p>";
+    vista.innerHTML += "<p>Error cargando los eventos.</p>";
   }
 }
 
 async function mostrarInscripciones() {
   const vista = document.getElementById("admin-vista");
-  vista.innerHTML = "<h3>Los eventos inscritos por categoria </h3>";
+  vista.innerHTML = "<h3>Inscripciones por evento</h3>";
 
   try {
     const eventos = await (await fetch(`${API}/eventos`)).json();
-    const usuarios = await (await fetch(`${API}/usurios`)).json();
+    const usuarios = await (await fetch(`${API}/usuarios`)).json();
     const inscripciones = await (await fetch(`${API}/inscripciones`)).json();
 
     for (const evento of eventos) {
-      const inscritos = inscripciones.filter(i => i.eventoId == evento.id);
+      const inscritos = inscripciones.filter(i => String(i.eventoId) === String(evento.id));
       const div = document.createElement("div");
       div.classList.add("inscripcion-item");
       div.innerHTML = `<strong>${evento.titulo}</strong><br>`;
 
       if (inscritos.length === 0) {
-        div.innerHTML += "<em> No hay evento inscritos.</em>";
+        div.innerHTML += "<em>No hay inscritos para este evento.</em>";
       } else {
         div.innerHTML += "<ul>";
         for (const ins of inscritos) {
-          const cliente = usuarios.find(u => u.id == ins.usuarioId);
+          const cliente = usuarios.find(u => String(u.id) === String(ins.usuarioId));
           if (cliente) {
             div.innerHTML += `<li>${cliente.nombre} <button class='eliminar-insc' data-id='${ins.id}'>❌</button></li>`;
           }
@@ -175,7 +190,7 @@ async function mostrarInscripciones() {
     document.querySelectorAll(".eliminar-insc").forEach(btn => {
       btn.addEventListener("click", async () => {
         const id = btn.dataset.id;
-        const confirmar = confirm("¿Eliminar esta incripcion?");
+        const confirmar = confirm("¿Eliminar esta inscripción?");
         if (!confirmar) return;
 
         const res = await fetch(`${API}/inscripciones/${id}`, { method: "DELETE" });
@@ -190,6 +205,6 @@ async function mostrarInscripciones() {
 
   } catch (error) {
     console.error(error);
-    vista.innerHTML += "<p>Error cargando la inscripciones.</p>";
+    vista.innerHTML += "<p>Error cargando las inscripciones.</p>";
   }
 }

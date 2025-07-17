@@ -2,20 +2,20 @@ import { getUsuarioActual, logout } from "../js/auth.js";
 
 const API = "http://localhost:3000";
 
-export function mostrarDashboardUsurio() {
+export function mostrarDashboardUsuario() {
   const app = document.getElementById("app");
   const usuario = getUsuarioActual();
 
   app.innerHTML = `
-    <section id="usurio-panel">
-      <h2>📚 Dashboard Usurios</h2>
-      <div class="usurio-botones">
+    <section id="usuario-panel">
+      <h2>📚 Dashboard Usuarios</h2>
+      <div class="usuario-botones">
         <button id="btn-disponibles">📚 Ver eventos disponibles</button>
         <button id="btn-mis-eventos">📋 Ver mis eventos</button>
         <button id="btn-inicio">🏠 Volver al inicio</button>
         <button id="cerrar-sesion">❌ Cerrar sesión</button>
       </div>
-      <div id="usurio-vista"></div>
+      <div id="usuario-vista"></div>
     </section>
   `;
 
@@ -35,7 +35,7 @@ async function verEventosDisponibles(usuario) {
   const inscripcionesUsuario = await (await fetch(`${API}/inscripciones?usuarioId=${usuario.id}`)).json();
   const eventosInscritos = inscripcionesUsuario.map(i => i.eventoId);
 
-  const vista = document.getElementById("usurio-vista");
+  const vista = document.getElementById("usuario-vista");
   vista.innerHTML = "<h3>Eventos disponibles</h3>";
 
   for (const evento of eventos) {
@@ -46,13 +46,13 @@ async function verEventosDisponibles(usuario) {
     const div = document.createElement("div");
     div.innerHTML = `
       <strong>${evento.titulo}</strong> - ${evento.descripcion}<br>
-      Categoría: ${evento.categoria} | organizador: ${evento.organizador} | Capacidad: ${evento.capacidad}<br>
+      Categoría: ${evento.categoria} | Organizador: ${evento.organizador} | Capacidad: ${evento.capacidad}<br>
     `;
 
     if (yaInscrito) {
       div.innerHTML += `<em>✅ Ya estás inscrito en este evento.</em>`;
     } else if (!cupoDisponible) {
-      div.innerHTML += `<em>❌ El evento esta  lleno. No hay cupos disponibles.</em>`;
+      div.innerHTML += `<em>❌ El evento está lleno. No hay cupos disponibles.</em>`;
     } else {
       const boton = document.createElement("button");
       boton.textContent = "✅ Inscribirme";
@@ -66,13 +66,12 @@ async function verEventosDisponibles(usuario) {
     vista.appendChild(div);
   }
 
-  // Enlazar eventos a los botones una sola vez después del render
   setTimeout(() => {
     const botones = document.querySelectorAll(".btn-inscribir");
     botones.forEach(boton => {
       boton.addEventListener("click", async () => {
-        const eventoId = Number(boton.dataset.eventoId);
-        const usuarioId = Number(boton.dataset.usuarioId);
+        const eventoId = boton.dataset.eventoId;
+        const usuarioId = boton.dataset.usuarioId;
 
         const confirmar = confirm("¿Deseas inscribirte en este evento?");
         if (!confirmar) return;
@@ -91,7 +90,7 @@ async function verEventosDisponibles(usuario) {
           const data = await res.json();
           console.log("✅ Inscripción guardada:", data);
           alert("✅ Te has inscrito correctamente.");
-          mostrarDashboardUsurio();
+          mostrarDashboardUsuario();
         } catch (err) {
           console.error("❌ Error en inscripción:", err);
           alert("❌ No se pudo guardar la inscripción.");
@@ -105,7 +104,7 @@ async function verMisEventos(usuario) {
   const inscripciones = await (await fetch(`${API}/inscripciones?usuarioId=${usuario.id}`)).json();
   const eventos = await (await fetch(`${API}/eventos`)).json();
 
-  const vista = document.getElementById("usurio-vista");
+  const vista = document.getElementById("usuario-vista");
   vista.innerHTML = "<h3>Mis eventos inscritos</h3>";
 
   if (inscripciones.length === 0) {
@@ -114,12 +113,12 @@ async function verMisEventos(usuario) {
   }
 
   inscripciones.forEach(ins => {
-    const evento = eventos.find(c => Number(c.id) === Number(ins.eventoId));
+    const evento = eventos.find(e => String(e.id) === String(ins.eventoId));
     if (evento) {
       const div = document.createElement("div");
       div.innerHTML = `
         <strong>${evento.titulo}</strong> - ${evento.descripcion}<br>
-        Categoría: ${evento.categoria} | organizador: ${evento.organizador}
+        Categoría: ${evento.categoria} | Organizador: ${evento.organizador}
         <hr>
       `;
       vista.appendChild(div);
